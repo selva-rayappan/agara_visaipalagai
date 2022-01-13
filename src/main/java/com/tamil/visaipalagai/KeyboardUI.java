@@ -4694,10 +4694,7 @@ public class KeyboardUI extends javax.swing.JFrame {
 		keyenter.setBackground(GlobalConstant.getDefaultKeyColor());
 		keyenter.setForeground(GlobalConstant.getDefaultKeyFgColor());
 		keyenter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		//keyenter.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 		//keyenter.setIcon(new ImageIcon(getClass().getResource("/icons/enterkey.png")));
-		//keyenter.setVerticalTextPosition(SwingConstants.CENTER);
-		//keyenter.setHorizontalTextPosition(SwingConstants.CENTER);
 		keyenter.setText("<html>&nbsp;நுழை ⏎ <br>&nbsp;</html>");
 		keyenter.setFocusable(false);
 		keyenter.setMaximumSize(new java.awt.Dimension(76, 40));
