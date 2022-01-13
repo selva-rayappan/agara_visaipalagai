@@ -21,7 +21,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.util.Hashtable;
+import java.awt.event.KeyEvent;
 
 import static java.awt.event.KeyEvent.VK_ALT;
 import static java.awt.event.KeyEvent.VK_CAPS_LOCK;
@@ -30,13 +30,17 @@ import static java.awt.event.KeyEvent.VK_NUM_LOCK;
 import static java.awt.event.KeyEvent.VK_SCROLL_LOCK;
 import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.awt.event.KeyEvent.VK_V;
+import static java.awt.event.KeyEvent.VK_LEFT;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_UP;
+import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_WINDOWS;
 
 /*
  * Keyboard events received and handled 
  * Special Keys-SHIFT/ALT/WIN/CAPS/SCROLLS are tracked separately in different functions
  */
-public class Keyboard implements GlobalConstant {
+public class Keyboard extends GlobalConstant {
     private static boolean IS_NUM_LOCK_ON = true;
     private static boolean IS_CAPS_LOCK_ON = false;
     private static boolean IS_SCROLL_LOCK_ON = false;
@@ -45,21 +49,33 @@ public class Keyboard implements GlobalConstant {
     private static boolean IS_ALT_PRESSED = false;
     private static boolean IS_WIN_PRESSED = false;
     private static boolean IS_MAATRU_PRESSED = false;
-    private static final int TM_KEYMAATRU = 10227; // Uyir Maatru - Reload Decimal keycode
-    private static final int TM_UNICODE_START = 2944; // Tamil unicode start - Decimal
-    private static final int TM_UNICODE_END = 3071; // Tamil unicode end - Decimal
-    private static final int TM_UNICODE_KEYSTH = 999999; // Tamil unicode Keysth - Decimal 
-    
     
     /*
      * Keyboard default constructor 
      */
 	Keyboard() {
-		
 
 	}
 	
-    private static Robot robot = null;
+    public static void initialize_hashtable() {
+		// TODO Auto-generated method stub
+ 		ht.put(2949,'அ' );    		ht.put(2950,'ஆ' );			ht.put(2951,'இ' );			ht.put(2952,'ஈ' );			ht.put(2953,'உ' );			ht.put(2954,'ஊ' );			ht.put(2958,'எ' );
+		ht.put(2959,'ஏ' );			ht.put(2960,'ஐ' );			ht.put(2962,'ஒ' );			ht.put(2963,'ஓ' );			ht.put(2964,'ஔ');			ht.put(2965,'க' );			ht.put(2969,'ங' );
+		ht.put(2970,'ச' );			ht.put(2972,'ஜ' );			ht.put(2974,'ஞ' );			ht.put(2975,'ட' );			ht.put(2979,'ண');			ht.put(2980,'த' );			ht.put(2984,'ந' );
+		ht.put(2985,'ன' );			ht.put(2986,'ப' );			ht.put(2990,'ம' );			ht.put(2991,'ய' );			ht.put(2992,'ர' );			ht.put(2993,'ற' );			ht.put(2994,'ல' );
+		ht.put(2995,'ள' );			ht.put(2996,'ழ' );			ht.put(2997,'வ' );			ht.put(2998,'ஶ' );			ht.put(2999,'ஷ' );			ht.put(3000,'ஸ' );			ht.put(3001,'ஹ');
+		ht.put(3006,'ா');			ht.put(3007,'ி');			ht.put(3008,'ீ');			ht.put(3009,'ு');			ht.put(3010,'ூ');			ht.put(3014,'ெ');			ht.put(3015,'ே');
+		ht.put(3016,'ை');			ht.put(3018,'ொ');			ht.put(3019,'ோ');			ht.put(3020,'ௌ');			ht.put(3021,'்');			ht.put(3024,'ௐ');			ht.put(3046,'௦');
+		ht.put(3047,'௧');			ht.put(3048,'௨');			ht.put(3049,'௩');			ht.put(3050,'௪');			ht.put(3051,'௫');			ht.put(3052,'௬');			ht.put(3053,'௭');
+		ht.put(3054,'௮');			ht.put(3055,'௯');			ht.put(3056,'௰');			ht.put(3057,'௱');			ht.put(3058,'௲');			ht.put(3059,'௳');			ht.put(3060,'௴');
+		ht.put(3061,'௵');			ht.put(3062,'௶');			ht.put(3063,'௷');			ht.put(3064,'௸');			ht.put(3065,'௹');			ht.put(3066,'௺');			ht.put(2947,'ஃ');
+		ht.put(33, '!');	ht.put(34, '"');	ht.put(35, '#');	ht.put(36, '$');	ht.put(37, '%');	ht.put(38, '&');	ht.put(39, '\'');	ht.put(40, '(');		ht.put(41, ')');
+		ht.put(42, '*');	ht.put(43, '+');	ht.put(44, ',');	ht.put(45, '-');	ht.put(46, '.');	ht.put(47, '/');	ht.put(58, ':');	ht.put(59,';');		ht.put(60, '<');
+		ht.put(61, '=');	ht.put(62, '>');	ht.put(63, '?');	ht.put(64, '@');	ht.put(91, '[');	ht.put(92, '\\');	ht.put(93, ']');	ht.put(94, '^');	ht.put(95, '_');	ht.put(96, '`');
+		ht.put(123, '{');	ht.put(124, '|');	ht.put(125, '}');	ht.put(126, '~');
+	}
+
+	private static Robot robot = null;
     static { 
         try {
             robot = new Robot();
@@ -89,6 +105,22 @@ public class Keyboard implements GlobalConstant {
         }
     }
     
+    public static void pressUnicode(int key_code)
+    {
+    	robot.keyPress(KeyEvent.VK_ALT);
+
+        for(int i = 3; i >= 0; --i)
+        {
+            // extracts a single decade of the key-code and adds
+            // an offset to get the required VK_NUMPAD key-code
+            int numpad_kc = key_code / (int) (Math.pow(10, i)) % 10 + KeyEvent.VK_NUMPAD0;
+
+            robot.keyPress(numpad_kc);
+            robot.keyRelease(numpad_kc);
+        }
+
+        robot.keyRelease(KeyEvent.VK_ALT);
+    }
     /**
      * Performs a key press activity. A key pressed must be released using 
      * releaseKey()
@@ -102,9 +134,10 @@ public class Keyboard implements GlobalConstant {
         if(robot == null)
             throw new UnsupportedOperationException("This platform doesn't supports low level keyboard activities.");
         
-        /**
+        /*
          * Check if the special function key is already pressed then simply return
          */
+        
         switch (keycode) {
             case VK_SHIFT:
                 if (IS_SHIFT_PRESSED)
@@ -129,33 +162,46 @@ public class Keyboard implements GlobalConstant {
                 IS_MAATRU_PRESSED = true;
                 if(IS_MAATRU_PRESSED)
                     return;
+            case VK_UP:
+            case VK_DOWN:
+            case VK_LEFT:
+            case VK_RIGHT:
+            	robot.keyPress(keycode);
+                    return;
         }
+        
         /*
          * Keycode is scanned for மெய்எழுத்து and utilizes System Copy-Paste functions to write the letters
          */
-        if((keycode >=TM_UNICODE_START & keycode <=TM_UNICODE_END) | (keycode == TM_UNICODE_KEYSTH))
+        
+        if((keycode >=TM_UNICODE_START & keycode <=TM_UNICODE_END) | 
+        		(keycode == TM_UNICODE_KEYSTH) | keycode == TM_UNICODE_KEYSRI |
+        		(keycode >=SYM_UNICODE_START & keycode <=SYM_UNICODE_END) |
+        		(keycode >=SYM1_UNICODE_START & keycode <=SYM1_UNICODE_END) |
+        		(keycode >=SYM2_UNICODE_START & keycode <=SYM2_UNICODE_END) |
+        		(keycode >=SYM3_UNICODE_START & keycode <=SYM3_UNICODE_END) |
+        		(keycode >=SYM4_UNICODE_START & keycode <=SYM4_UNICODE_END)
+        		)
     	{
-        	final Hashtable<Integer, Character> ht = new Hashtable<>();
-
-    		ht.put(2949,'அ' );			ht.put(2950,'ஆ' );			ht.put(2951,'இ' );			ht.put(2952,'ஈ' );			ht.put(2953,'உ' );			ht.put(2954,'ஊ' );			ht.put(2958,'எ' );
-    		ht.put(2959,'ஏ' );			ht.put(2960,'ஐ' );			ht.put(2962,'ஒ' );			ht.put(2963,'ஓ' );			ht.put(2964,'ஔ');			ht.put(2965,'க' );			ht.put(2969,'ங' );
-    		ht.put(2970,'ச' );			ht.put(2972,'ஜ' );			ht.put(2974,'ஞ' );			ht.put(2975,'ட' );			ht.put(2979,'ண');			ht.put(2980,'த' );			ht.put(2984,'ந' );
-    		ht.put(2985,'ன' );			ht.put(2986,'ப' );			ht.put(2990,'ம' );			ht.put(2991,'ய' );			ht.put(2992,'ர' );			ht.put(2993,'ற' );			ht.put(2994,'ல' );
-    		ht.put(2995,'ள' );			ht.put(2996,'ழ' );			ht.put(2997,'வ' );			ht.put(2998,'ஶ' );			ht.put(2999,'ஷ' );			ht.put(3000,'ஸ' );			ht.put(3001,'ஹ');
-    		ht.put(3006,'ா');			ht.put(3007,'ி');			ht.put(3008,'ீ');			ht.put(3009,'ு');			ht.put(3010,'ூ');			ht.put(3014,'ெ');			ht.put(3015,'ே');
-    		ht.put(3016,'ை');			ht.put(3018,'ொ');			ht.put(3019,'ோ');			ht.put(3020,'ௌ');			ht.put(3021,'்');			ht.put(3024,'ௐ');			ht.put(3046,'௦');
-    		ht.put(3047,'௧');			ht.put(3048,'௨');			ht.put(3049,'௩');			ht.put(3050,'௪');			ht.put(3051,'௫');			ht.put(3052,'௬');			ht.put(3053,'௭');
-    		ht.put(3054,'௮');			ht.put(3055,'௯');			ht.put(3056,'௰');			ht.put(3057,'௱');			ht.put(3058,'௲');			ht.put(3059,'௳');			ht.put(3060,'௴');
-    		ht.put(3061,'௵');			ht.put(3062,'௶');			ht.put(3063,'௷');			ht.put(3064,'௸');			ht.put(3065,'௹');			ht.put(3066,'௺');			ht.put(2947,'ஃ');
     		
-	        	if(keycode == TM_UNICODE_KEYSTH)
-	        	{
-	        		keyhit = "க்ஷ";
+	        	switch(keycode) {
+	        	
+	        	case TM_UNICODE_KEYSTH:
+	              		keyhit = "க்ஷ";	        			break;
+	        	case TM_UNICODE_KEYSRI:
+	        			keyhit = "ஸ்ரீ";						break;
+	        	case 37:
+	        			keyhit = "%";	        			break;
+	        	case 38:
+	        			keyhit = "&";	        			break;
+	        	case 39:
+	        			keyhit = "'";	        			break;
+	        	case 40:
+	        			keyhit = "(";	        			break;
+	        	default: 
+	        			keystroke = ht.get(keycode);
 	        	}
-	        	else
-	        	{				
-	        		keystroke = ht.get(keycode);
-	        	}
+	        	
 	        	keyhit = keyhit.concat(String.valueOf(keystroke));
     			copy(keyhit);
     	        robot.keyPress(VK_CONTROL);
@@ -170,7 +216,7 @@ public class Keyboard implements GlobalConstant {
     }
     
     /**
-     * Releases a key that was previously pressed.2950
+     * Releases a key that was previously pressed.
      * @param keycode integer representing the Virtual Key code.
      */
     public static void releaseKey(int keycode) {
@@ -203,14 +249,21 @@ public class Keyboard implements GlobalConstant {
             case TM_KEYMAATRU:
                 IS_MAATRU_PRESSED = true;
                 if(IS_MAATRU_PRESSED)
-                    return;
+                    return;         
         }
         
         /*
          * Keycode is scanned for மெய்எழுத்து and utilizes System Copy-Paste functions to write the letters
          */    
         
-        if(keycode >=2944 & keycode <=3071) 
+        if((keycode >=TM_UNICODE_START & keycode <=TM_UNICODE_END) | 
+        		(keycode == TM_UNICODE_KEYSTH) | keycode == TM_UNICODE_KEYSRI |
+        		(keycode >=SYM_UNICODE_START & keycode <=SYM_UNICODE_END) |
+        		(keycode >=SYM1_UNICODE_START & keycode <=SYM1_UNICODE_END) |
+        		(keycode >=SYM2_UNICODE_START & keycode <=SYM2_UNICODE_END) |
+        		(keycode >=SYM3_UNICODE_START & keycode <=SYM3_UNICODE_END) |
+        		(keycode >=SYM4_UNICODE_START & keycode <=SYM4_UNICODE_END)
+        		)
     	{
             robot.keyRelease(VK_CONTROL);
             robot.keyRelease(VK_V);
@@ -301,6 +354,9 @@ public class Keyboard implements GlobalConstant {
      */
     public static boolean isWinPressed() {
         return IS_WIN_PRESSED;
+    }
+    public static boolean isMaatruPressed() {
+        return IS_MAATRU_PRESSED;
     }
     public static void copy(String keyhit)
     {

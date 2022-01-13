@@ -2,7 +2,46 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com</groupId>
   <artifactId>tamil</artifactId>
+  <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>visalpalagai</name>
   <description>Tamil Onscreen Keyboard		</description>
+	<properties>
+     	<maven.compiler.source>1.8</maven.compiler.source>
+     	<maven.compiler.target>1.8</maven.compiler.target>
+     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+  <build>
+  <resources>
+    	<resource>
+    		<directory>src/main/resources</directory>
+    	</resource>
+    	<resource>
+            <directory>src/main/resources/icons</directory>
+                <includes>
+                    <include>**/*.png</include>
+                </includes>
+        </resource>
+        <resource>
+            <directory>src/main/resources/fonts</directory>
+                <includes>
+                    <include>**/*.ttf</include>
+                </includes>
+        </resource>
+    </resources>
+    <plugins>
+            <plugin>
+	            <artifactId>maven-jar-plugin</artifactId>
+	            <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                        <addClasspath>true</addClasspath>
+                            <mainClass>com.tamil.visaipalagai.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+    </plugins>
+  </build>
 </project>
